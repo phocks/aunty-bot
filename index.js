@@ -24,9 +24,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
     const contexts = request.body.result.contexts;
 
     // Just testing
-    console.log(action);
-    console.log("params " + parameters["Joke-subject"]);
-    console.log(contexts);
+    console.log("Action: " + action);
+    console.log("Params: " + parameters["Joke-subject"]);
+    console.log("Contexts: " + contexts);
 
     // Initialize JSON we will use to respond to API.AI.
     let responseJson = {};
@@ -69,9 +69,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
 
         const subject = parameters["Joke-subject"];
 
-        console.log(subject);
-
-        if (subject === "") {
+        if (!subject) {
           axios
             .get("http://icanhazdadjoke.com/", config)
             .then(function(res) {
@@ -86,17 +84,32 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
             });
         } else {
           axios
-          .get("http://icanhazdadjoke.com/search?term=" + encodeURIComponent(subject), config)
-          .then(function(res) {
-            console.log("Done request");
-            console.log(res.data.results[0].joke);
-            responseJson.speech = res.data.results[0].joke;
-            responseJson.displayText = res.data.results[0].joke;
-            response.json(responseJson);
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+            .get(
+              "http://icanhazdadjoke.com/search?term=" +
+                encodeURIComponent(subject),
+              config
+            )
+            .then(function(res) {
+              console.log("Done request");
+              console.log(res.data);
+              // console.log(res.data.results[0].joke);
+              if (res.data.results[0]) {
+                const resultsCount = res.data.results.length;
+                
+                const whichResultNumber = getRandomInt(0, resultsCount - 1);
+                
+                responseJson.speech = res.data.results[whichResultNumber].joke;
+                responseJson.displayText = res.data.results[whichResultNumber].joke;
+                response.json(responseJson);
+              } else {
+                responseJson.speech = "I am sorry I couldn't find any dad jokes about " + subject + "... Hi sorry I couldn't find any dad jokes about " + subject + ", I'm Dad." ;
+                responseJson.displayText = "I am sorry I couldn't find any dad jokes about " + subject + "... Hi Sorry I Couldn't Find Any Dad Jokes About " + titleCase(subject) + "... I'm Dad.";
+                response.json(responseJson);
+              }
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
         }
       },
       default: () => {
@@ -122,3 +135,17 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
     actionHandlers[action](request, response);
   }
 );
+
+/**
+ * Returns a random integer between min (inclusive) and max (inclusive)
+ * Using Math.round() will give you a non-uniform distribution!
+ */
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function titleCase(str) {
+  return str.toLowerCase().split(' ').map(function(word) {
+    return word.replace(word[0], word[0].toUpperCase());
+  }).join(' ');
+}
