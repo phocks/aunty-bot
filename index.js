@@ -23,6 +23,11 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
     // See https://api.ai/docs/contexts for more.
     const contexts = request.body.result.contexts;
 
+    // Just testing
+    console.log(action);
+    console.log("params " + parameters["Joke-subject"]);
+    console.log(contexts);
+
     // Initialize JSON we will use to respond to API.AI.
     let responseJson = {};
 
@@ -62,18 +67,37 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
           headers: { "User-Agent": "request", Accept: "application/json" }
         };
 
-        axios
-          .get("http://icanhazdadjoke.com/", config)
+        const subject = parameters["Joke-subject"];
+
+        console.log(subject);
+
+        if (subject === "") {
+          axios
+            .get("http://icanhazdadjoke.com/", config)
+            .then(function(res) {
+              console.log("Done request");
+              console.log(res.data);
+              responseJson.speech = res.data.joke;
+              responseJson.displayText = res.data.joke;
+              response.json(responseJson);
+            })
+            .catch(function(error) {
+              console.log(error);
+            });
+        } else {
+          axios
+          .get("http://icanhazdadjoke.com/search?term=" + encodeURIComponent(subject), config)
           .then(function(res) {
             console.log("Done request");
-            console.log(res.data);
-            responseJson.speech = res.data.joke;
-            responseJson.displayText = res.data.joke;
+            console.log(res.data.results[0].joke);
+            responseJson.speech = res.data.results[0].joke;
+            responseJson.displayText = res.data.results[0].joke;
             response.json(responseJson);
           })
           .catch(function(error) {
             console.log(error);
           });
+        }
       },
       default: () => {
         // This is executed if the action hasn't been defined.
