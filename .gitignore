@@ -35,3 +35,6 @@ node_modules
 # OS
 .DS_Store
 .tmp
+
+# Config
+config.json

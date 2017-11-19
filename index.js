@@ -3,6 +3,10 @@
 const functions = require("firebase-functions");
 const axios = require("axios");
 
+const env = require("./config.json");
+
+console.log(env.subscriptionKey);
+
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
   (request, response) => {
     // Log the request header and body coming from API.AI to help debug issues.
@@ -95,15 +99,26 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
               // console.log(res.data.results[0].joke);
               if (res.data.results[0]) {
                 const resultsCount = res.data.results.length;
-                
+
                 const whichResultNumber = getRandomInt(0, resultsCount - 1);
-                
+
                 responseJson.speech = res.data.results[whichResultNumber].joke;
-                responseJson.displayText = res.data.results[whichResultNumber].joke;
+                responseJson.displayText =
+                  res.data.results[whichResultNumber].joke;
                 response.json(responseJson);
               } else {
-                responseJson.speech = "I am sorry I couldn't find any dad jokes about " + subject + "... Hi sorry I couldn't find any dad jokes about " + subject + ", I'm Dad." ;
-                responseJson.displayText = "I am sorry I couldn't find any dad jokes about " + subject + "... Hi Sorry I Couldn't Find Any Dad Jokes About " + titleCase(subject) + "... I'm Dad.";
+                responseJson.speech =
+                  "I am sorry I couldn't find any dad jokes about " +
+                  subject +
+                  "... Hi Sorry I Couldn't Find Any Dad Jokes About " +
+                  titleCase(subject) +
+                  "... I'm Dad.";
+                responseJson.displayText =
+                  "I am sorry I couldn't find any dad jokes about " +
+                  subject +
+                  "... Hi Sorry I Couldn't Find Any Dad Jokes About " +
+                  titleCase(subject) +
+                  "... I'm Dad.";
                 response.json(responseJson);
               }
             })
@@ -145,7 +160,11 @@ function getRandomInt(min, max) {
 }
 
 function titleCase(str) {
-  return str.toLowerCase().split(' ').map(function(word) {
-    return word.replace(word[0], word[0].toUpperCase());
-  }).join(' ');
+  return str
+    .toLowerCase()
+    .split(" ")
+    .map(function(word) {
+      return word.replace(word[0], word[0].toUpperCase());
+    })
+    .join(" ");
 }
