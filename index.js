@@ -134,7 +134,30 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
        * 
        **********************************************/
       "input.cognitive": (request, response) => {
-        cognitiveSearch();
+        // cognitiveSearch();
+
+        var config = {
+          headers: { "Ocp-Apim-Subscription-Key": env.subscriptionKey }
+        };
+
+        axios
+        .get("https://api.cognitive.microsoft.com//bing/v7.0/news/search?q=" + encodeURIComponent(""), config)
+        .then(function(res) {
+          console.log("Done request");
+          console.log(res.data.value[0].url);
+          responseJson.speech = "Bing!";
+          responseJson.displayText = "Bing!";
+          response.json(responseJson);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+
+        // responseJson.speech = "Bing!";
+        // responseJson.displayText = "Bing!";
+
+        // // Send the response to API.AI
+        // response.json(responseJson);
       },
       default: () => {
         // This is executed if the action hasn't been defined.
@@ -160,6 +183,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
   }
 );
 
+////////////////////////////////////////
+// A function that calls the Bing API //
+////////////////////////////////////////
+
 function cognitiveSearch() {
   // Replace the subscriptionKey string value with your valid subscription key.
   let subscriptionKey = env.subscriptionKey;
@@ -169,32 +196,32 @@ function cognitiveSearch() {
   // encounter unexpected authorization errors, double-check this host against
   // the endpoint for your Bing Web search instance in your Azure dashboard.
   let host = "api.cognitive.microsoft.com";
-  let path = "/bing/v7.0/search";
+  let path = "/bing/v7.0/news/search";
 
   let term = "Microsoft Cognitive Services";
 
-  let response_handler = function(response) {
+  let response_handler = function(res) {
     let body = "";
-    response.on("data", function(d) {
+    res.on("data", function(d) {
       body += d;
     });
-    response.on("end", function() {
+    res.on("end", function() {
       console.log("\nRelevant Headers:\n");
       // header keys are lower-cased by Node.js
-      for (var header in response.headers)
+      for (var header in res.headers)
         if (header.startsWith("bingapis-") || header.startsWith("x-msedge-"))
-          console.log(header + ": " + response.headers[header]);
+          console.log(header + ": " + res.headers[header]);
       body = JSON.stringify(JSON.parse(body), null, "  ");
       console.log("\nJSON Response:\n");
       console.log(body);
     });
-    response.on("error", function(e) {
+    res.on("error", function(e) {
       console.log("Error: " + e.message);
     });
   };
 
-  let bing_web_search = function(search) {
-    console.log("Searching the Web for: " + term);
+  let bing_news_search = function(search) {
+    console.log("Searching for: " + term);
     let request_params = {
       method: "GET",
       hostname: host,
@@ -209,7 +236,7 @@ function cognitiveSearch() {
   };
 
   if (subscriptionKey.length === 32) {
-    bing_web_search(term);
+    bing_news_search(term);
   } else {
     console.log("Invalid Bing Search API subscription key!");
     console.log("Please paste yours into the source code.");
