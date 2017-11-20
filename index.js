@@ -141,23 +141,32 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest(
         };
 
         axios
-        .get("https://api.cognitive.microsoft.com//bing/v7.0/news/search?q=" + encodeURIComponent(""), config)
-        .then(function(res) {
-          console.log("Done request");
-          console.log(res.data.value[0].url);
-          responseJson.speech = "Bing!";
-          responseJson.displayText = "Bing!";
-          response.json(responseJson);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          .get(
+            "https://api.cognitive.microsoft.com//bing/v7.0/news/search?q=" +
+              encodeURIComponent(""),
+            config
+          )
+          .then(function(res) {
+            console.log("Done request");
+            console.log(res.data.value[0].url);
 
-        // responseJson.speech = "Bing!";
-        // responseJson.displayText = "Bing!";
+            const resultsCount = res.data.value.length;
+            const whichResultNumber = getRandomInt(0, resultsCount - 1);
 
-        // // Send the response to API.AI
-        // response.json(responseJson);
+            const newsUrl = res.data.value[whichResultNumber].url;
+
+            responseJson.channelData = {
+              unfurl_links: "true",
+              unfurl_media: "true"
+            };
+
+            responseJson.speech = "Here's some news: " + newsUrl;
+            responseJson.displayText = "Here's some news: " + newsUrl;
+            response.json(responseJson);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
       },
       default: () => {
         // This is executed if the action hasn't been defined.
