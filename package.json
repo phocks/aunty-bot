@@ -15,7 +15,7 @@
   "dependencies": {
     "actions-on-google": "^1.5.x",
     "apiai": "^4.0.3",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "firebase-admin": "^4.2.1",
     "firebase-functions": "^0.5.7",
     "https": "^1.0.0",
