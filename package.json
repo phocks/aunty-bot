@@ -17,7 +17,7 @@
     "apiai": "^4.0.3",
     "axios": "^0.18.1",
     "firebase-admin": "^4.2.1",
-    "firebase-functions": "^0.5.7",
+    "firebase-functions": "^0.9.1",
     "https": "^1.0.0",
     "serverless-google-cloudfunctions": "^1.1.1"
   }
