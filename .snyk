@@ -1,0 +1,35 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.19.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-NODEFORGE-598677:
+    - actions-on-google > google-auth-library > gtoken > google-p12-pem > node-forge:
+        reason: None given
+        expires: '2021-06-03T00:11:45.574Z'
+  SNYK-JS-WEBSOCKETEXTENSIONS-570623:
+    - firebase-admin > faye-websocket > websocket-driver > websocket-extensions:
+        reason: None given
+        expires: '2021-06-03T00:11:45.574Z'
+  'npm:base64url:20180511':
+    - firebase-admin > jsonwebtoken > jws > base64url:
+        reason: None given
+        expires: '2021-06-03T00:11:45.574Z'
+    - firebase-admin > jsonwebtoken > jws > jwa > base64url:
+        reason: None given
+        expires: '2021-06-03T00:11:45.574Z'
+    - firebase-admin > jsonwebtoken > jws > jwa > ecdsa-sig-formatter > base64url:
+        reason: None given
+        expires: '2021-06-03T00:11:45.574Z'
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:hoek:20180212':
+    - firebase-admin > jsonwebtoken > joi > topo > hoek:
+        patched: '2021-05-04T00:10:39.463Z'
+    - firebase-admin > jsonwebtoken > joi > hoek:
+        patched: '2021-05-04T00:10:39.463Z'
+  'npm:moment:20170905':
+    - firebase-admin > jsonwebtoken > joi > moment:
+        patched: '2021-05-04T00:10:39.463Z'
+  'npm:ms:20170412':
+    - firebase-admin > jsonwebtoken > ms:
+        patched: '2021-05-04T00:10:39.463Z'

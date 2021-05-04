@@ -10,15 +10,16 @@
   },
   "scripts": {
     "start": "firebase serve --only functions:dialogflowFirebaseFulfillment",
-    "deploy": "firebase deploy --only functions:dialogflowFirebaseFulfillment"
+    "deploy": "firebase deploy --only functions:dialogflowFirebaseFulfillment",
+    "test": "snyk test",
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
   },
   "dependencies": {
-    "actions-on-google": "^1.5.x",
     "apiai": "^4.0.3",
-    "axios": "^0.18.1",
     "firebase-admin": "^4.2.1",
-    "firebase-functions": "^0.5.7",
     "https": "^1.0.0",
-    "serverless-google-cloudfunctions": "^1.1.1"
-  }
+    "snyk": "^1.576.0"
+  },
+  "snyk": true
 }
