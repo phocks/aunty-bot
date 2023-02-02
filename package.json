@@ -19,7 +19,7 @@
     "apiai": "^4.0.3",
     "firebase-admin": "^4.2.1",
     "https": "^1.0.0",
-    "snyk": "^1.576.0"
+    "snyk": "^1.1094.0"
   },
   "snyk": true
 }
