@@ -20,7 +20,7 @@ export default {
 		const url = new URL(req.url);
 		url.pathname = '/__scheduled';
 		url.searchParams.append('cron', '* * * * *');
-		return new Response(`To test the scheduled handler, ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
+		return new Response(`To test the scheduled handler ... ensure you have used the "--test-scheduled" then try running "curl ${url.href}".`);
 	},
 
 	// The scheduled handler is invoked at the interval set in our wrangler.jsonc's
