@@ -2,20 +2,26 @@
  * For more details on how to configure Wrangler, refer to:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
+
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "aunty-bot",
 	"main": "src/index.ts",
 	"compatibility_date": "2026-10-06",
 	"observability": {
-		"enabled": true
+		"enabled": true,
+		"logs": {
+			"enabled": true,
+			"invocation_logs": true,
+		},
+		"traces": {
+			"enabled": false,
+		},
 	},
 	"triggers": {
-		"crons": [
-			"* * * * *"
-		]
+		"crons": ["* * * * *"],
 	},
-	"upload_source_maps": true
+	"upload_source_maps": true,
 	/**
 	 * Smart Placement
 	 * https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
