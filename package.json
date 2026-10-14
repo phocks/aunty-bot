@@ -12,5 +12,8 @@
 		"@types/node": "^26.6.5",
 		"typescript": "^5.5.2",
 		"wrangler": "^4.149.0"
+	},
+	"dependencies": {
+		"slack-cloudflare-workers": "^1.3.10"
 	}
 }
