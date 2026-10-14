@@ -21,9 +21,6 @@
 			"persist": true,
 		},
 	},
-	"triggers": {
-		"crons": ["* * * * *"],
-	},
 	"upload_source_maps": true,
 	/**
 	 * Smart Placement
